@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -52,4 +53,9 @@ public class ProductController {
         return productService.findByNameContaining(pName);
     }
 
+    @GetMapping("/findByPriceBetween")
+    @ResponseStatus(HttpStatus.OK)
+    public List<ProductResponse> findByPriceBetween(@RequestParam BigDecimal minPrice, @RequestParam BigDecimal maxPrice) {
+        return productService.findByPriceBetween(minPrice, maxPrice);
+    }
 }

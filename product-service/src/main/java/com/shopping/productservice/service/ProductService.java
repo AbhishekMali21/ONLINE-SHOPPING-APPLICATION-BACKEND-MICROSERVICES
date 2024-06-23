@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -61,6 +62,13 @@ public class ProductService {
         return productRepository.findByNameContaining(pName)
                 .stream()
                 .map(product -> new ProductResponse(product.getPId(), product.getPName(),product.getPDescription(), product.getPPrice()))
+                .toList();
+    }
+
+    public List<ProductResponse> findByPriceBetween(BigDecimal minPrice, BigDecimal maxPrice) {
+        return productRepository.findByPriceBetween(minPrice, maxPrice)
+                .stream()
+                .map(product -> new ProductResponse(product.getPId(), product.getPName(), product.getPDescription(), product.getPPrice()))
                 .toList();
     }
 }
