@@ -56,4 +56,11 @@ public class ProductService {
         productRepository.deleteById(pId);
         return "product deleted with product pId: " + pId;
     }
+
+    public List<ProductResponse> findByNameContaining(String pName) {
+        return productRepository.findByNameContaining(pName)
+                .stream()
+                .map(product -> new ProductResponse(product.getPId(), product.getPName(),product.getPDescription(), product.getPPrice()))
+                .toList();
+    }
 }

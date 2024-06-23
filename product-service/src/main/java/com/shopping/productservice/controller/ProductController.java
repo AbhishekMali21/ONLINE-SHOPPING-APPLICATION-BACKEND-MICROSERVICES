@@ -45,4 +45,11 @@ public class ProductController {
     public String deleteProduct(@PathVariable("pId") String pId) {
         return productService.deleteProduct(pId);
     }
+
+    @GetMapping("/findByNameContaining/{pName}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<ProductResponse> findByNameContaining(@PathVariable("pName") String pName) {
+        return productService.findByNameContaining(pName);
+    }
+
 }
