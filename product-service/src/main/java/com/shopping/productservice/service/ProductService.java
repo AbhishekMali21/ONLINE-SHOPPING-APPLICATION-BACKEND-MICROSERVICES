@@ -41,4 +41,19 @@ public class ProductService {
         log.info("product created with product pId is: {}", product.getPId());
         return new ProductResponse(product.getPId(), product.getPName(), product.getPDescription(), product.getPPrice());
     }
+
+    public ProductResponse updateProduct(String pId, ProductRequest productRequest) {
+        Product product = productRepository.findById(pId)
+                .orElseThrow(() -> new ProductNotFoundException("Product with pId " + pId + " is not available"));
+        product.setPName(productRequest.pName());
+        product.setPDescription(productRequest.pDescription());
+        product.setPPrice(productRequest.pPrice());
+        productRepository.save(product);
+        return new ProductResponse(product.getPId(), product.getPName(), product.getPDescription(), product.getPPrice());
+    }
+
+    public String deleteProduct(String pId) {
+        productRepository.deleteById(pId);
+        return "product deleted with product pId: " + pId;
+    }
 }
