@@ -21,6 +21,6 @@ public class SwaggerConfig {
                                 .url("http://www.apache.org/licenses/LICENSE-2.0.html")))
                 .externalDocs(new ExternalDocumentation()
                         .description("You can refer to the api-docs as json")
-                        .url("http://localhost:8080/api-docs"));
+                        .url("http://localhost:8080/v3/api-docs"));
     }
 }
