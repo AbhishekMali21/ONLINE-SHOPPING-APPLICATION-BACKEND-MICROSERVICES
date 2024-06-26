@@ -3,6 +3,7 @@ package com.shopping.productservice.controller;
 import com.shopping.productservice.request.ProductRequest;
 import com.shopping.productservice.response.ProductResponse;
 import com.shopping.productservice.service.ProductService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -31,13 +32,13 @@ public class ProductController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ProductResponse createProduct(@RequestBody ProductRequest productRequest) {
+    public ProductResponse createProduct(@Valid @RequestBody ProductRequest productRequest) {
         return productService.createProduct(productRequest);
     }
 
     @PutMapping("/{pId}")
     @ResponseStatus(HttpStatus.OK)
-    public ProductResponse updateProduct(@PathVariable String pId , @RequestBody ProductRequest productRequest) {
+    public ProductResponse updateProduct(@PathVariable String pId, @Valid @RequestBody ProductRequest productRequest) {
         return productService.updateProduct(pId, productRequest);
     }
 
