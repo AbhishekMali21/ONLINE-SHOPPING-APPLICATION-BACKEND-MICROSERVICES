@@ -8,21 +8,18 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.math.BigDecimal;
+import java.util.List;
 
-@Document(value = "product")
+@Document(value = "category")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Data
-public class Product {
+public class Category {
 
     @Id
-    private String pId;
-    private String pName;
-    private String pDescription;
-    private BigDecimal pPrice;
+    private String cId;
+    private String cName;
+    private String cDescription;
 
-    @DBRef
-    private Category category;
 }
