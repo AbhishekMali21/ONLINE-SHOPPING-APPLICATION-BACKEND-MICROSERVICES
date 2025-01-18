@@ -1,10 +1,13 @@
 package com.shopping.apigateway.routes;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.server.mvc.handler.GatewayRouterFunctions;
 import org.springframework.cloud.gateway.server.mvc.handler.HandlerFunctions;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.function.HandlerFilterFunction;
 import org.springframework.web.servlet.function.RequestPredicates;
 import org.springframework.web.servlet.function.RouterFunction;
 import org.springframework.web.servlet.function.ServerResponse;
@@ -13,6 +16,8 @@ import static org.springframework.cloud.gateway.server.mvc.filter.FilterFunction
 
 @Configuration
 public class Routes {
+
+    private static final Logger logger = LoggerFactory.getLogger(Routes.class);
 
     @Value("${product.service.url}")
     private String productServiceUrl;
@@ -62,7 +67,15 @@ public class Routes {
     private RouterFunction<ServerResponse> createSwaggerRoute(String id, String path, String uri) {
         return GatewayRouterFunctions.route(id)
                 .route(RequestPredicates.path(path), HandlerFunctions.http(uri))
-                .filter(setPath("/api-docs"))
+                .filter(setPath("/v3/api-docs"))
+                .filter(logRequest())
                 .build();
+    }
+
+    private HandlerFilterFunction<ServerResponse, ServerResponse> logRequest() {
+        return (request, next) -> {
+            logger.info("Request: {} {}", request.method(), request.uri());
+            return next.handle(request);
+        };
     }
 }
