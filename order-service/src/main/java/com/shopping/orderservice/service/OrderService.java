@@ -1,6 +1,7 @@
 package com.shopping.orderservice.service;
 
 import com.shopping.orderservice.entities.Order;
+import com.shopping.orderservice.exception.InventoryServiceUnavailableException;
 import com.shopping.orderservice.repository.OrderRepository;
 import com.shopping.orderservice.request.OrderRequest;
 import com.shopping.orderservice.response.OrderResponse;
@@ -20,8 +21,12 @@ public class OrderService {
     private final InventoryClientService inventoryClientService;
 
     public String placeOrder(OrderRequest orderRequest) {
-        boolean isProductInStock = inventoryClientService.isInStock(orderRequest.skuCode(), orderRequest.quantity());
-        if (isProductInStock) {
+        try {
+            boolean isProductInStock = inventoryClientService.isInStock(orderRequest.skuCode(), orderRequest.quantity());
+            if (!isProductInStock) {
+                throw new RuntimeException("Order Failed: Inventory is not in stock");
+            }
+
             Order order = Order.builder()
                     .orderNumber(UUID.randomUUID().toString())
                     .skuCode(orderRequest.skuCode())
@@ -31,8 +36,8 @@ public class OrderService {
             orderRepository.save(order);
             log.info("order created with order id is: {}", order.getId());
             return "Order Placed Successfully";
-        } else {
-            return "Order Failed: Inventory is not in stock";
+        } catch (InventoryServiceUnavailableException e) {
+            throw new InventoryServiceUnavailableException("Order Failed: Inventory service is down");
         }
     }
 
