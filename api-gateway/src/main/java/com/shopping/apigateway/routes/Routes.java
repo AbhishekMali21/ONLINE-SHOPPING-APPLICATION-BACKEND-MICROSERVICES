@@ -1,6 +1,5 @@
 package com.shopping.apigateway.routes;
 
-import org.apache.catalina.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,6 +40,16 @@ public class Routes {
     @Bean
     public RouterFunction<ServerResponse> productServiceSwaggerRoute() {
         return createSwaggerRoute("product_service_swagger", "/aggregate/product-service/v3/api-docs", productServiceUrl, "productServiceSwaggerCircuitBreaker");
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> categoryServiceRoute() {
+        return createServiceRoute("category_service", "/api/category/**", productServiceUrl, "categoryServiceCircuitBreaker");
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> categoryServiceSwaggerRoute() {
+        return createSwaggerRoute("category_service_swagger", "/aggregate/product-service/v3/api-docs", productServiceUrl, "categoryServiceSwaggerCircuitBreaker");
     }
 
     @Bean
